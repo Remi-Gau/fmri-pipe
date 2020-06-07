@@ -11,29 +11,29 @@ colgrid = matplotlib.colors.makeMappingArray(256, mycm)
 def batchroiplot(rois):
   
   peak = readpeak()
-  contrs = list(set([k.split('_')[0] for k in peak[0] if k]))
-  
+  contrs = list({k.split('_')[0] for k in peak[0] if k})
+
   pscale = {}
-  
+
   for roi in rois:
-    
+
     pscale[roi] = {}
-    
+
     for contr in contrs:
-      
+
       uniq = getuniqpeak(contr, roi, peak)
       ctmin = uniq[0]['ct']
       ctmax = uniq[-1]['ct']
-      
+
       pscale[roi][contr] = [ctmin, ctmax]
-      
+
       for hem in ['lh', 'rh']:
-        
+
         outname = '%s/%s/l2/surf_peak_%s_%s' % (figdir, contr, roi, hem)
         makeplot(uniq, hem, ctmin, ctmax,
           outname=outname, views=['lat', 'med'],
           roi=roi, contour=True)
-  
+
   return pscale
 
 def batchplot():
